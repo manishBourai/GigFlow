@@ -149,7 +149,7 @@ POST /api/gigs/:id/apply
 
 ### Users
 ```
-GET /api/users/:id
+GET /api/auth/:id
 ```
 
 ---
