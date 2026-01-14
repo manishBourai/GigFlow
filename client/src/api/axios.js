@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "http://ec2-3-81-28-89.compute-1.amazonaws.com:3000/api/",
   withCredentials:true
 });
 
