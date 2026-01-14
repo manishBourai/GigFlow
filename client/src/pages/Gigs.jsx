@@ -32,7 +32,9 @@ export default function Gigs() {
       <div className="min-h-screen bg-blue-50 flex items-center justify-center py-20">
         <div className="flex items-center gap-3">
           <div className="animate-spin rounded-full h-14 w-14 border-b-4 border-blue-600"></div>
-          <span className="text-xl font-medium text-gray-600">Loading gigs...</span>
+          <span className="text-xl font-medium text-gray-600">
+            Loading gigs...
+          </span>
         </div>
       </div>
     );
@@ -43,10 +45,18 @@ export default function Gigs() {
       <div className="min-h-screen bg-blue-50 flex flex-col items-center justify-center px-6 text-center py-20">
         <div className="w-20 h-20 bg-red-100 rounded-2xl mx-auto mb-6 flex items-center justify-center">
           <svg className="w-10 h-10 text-red-500" fill="none" viewBox="0 0 24 24">
-            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+            />
           </svg>
         </div>
+
         <h2 className="text-2xl font-bold text-gray-800 mb-4">{error}</h2>
+
         <button
           onClick={() => window.location.reload()}
           className="bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl"
@@ -62,11 +72,12 @@ export default function Gigs() {
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
         <header className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-blue-800 mb-6 bg-gradient-to-r from-blue-800 to-blue-600 bg-clip-text bg-[length:200%_200%] animate-gradient-x">
+          <h1 className="text-4xl md:text-5xl font-bold text-blue-800 mb-6">
             Latest Freelance Gigs
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Discover exciting opportunities and freelance projects from around the world.
+            Discover exciting opportunities and freelance projects from around
+            the world.
           </p>
         </header>
 
@@ -98,7 +109,6 @@ export default function Gigs() {
                   key={gig._id}
                   className="group bg-white/90 backdrop-blur-xl rounded-3xl shadow-xl hover:shadow-2xl border border-white/50 overflow-hidden transition-all duration-500 hover:-translate-y-3 hover:scale-[1.02]"
                 >
-                  {/* Content */}
                   <div className="p-8">
                     {/* Category Badge */}
                     <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 text-xs font-semibold px-4 py-2 rounded-full mb-4">
@@ -114,7 +124,7 @@ export default function Gigs() {
                       {gig.description}
                     </p>
 
-                    {/* Meta Info */}
+                    {/* Meta */}
                     <div className="space-y-3 mb-8">
                       <div className="flex items-center gap-2 text-sm">
                         <DollarSign className="w-4 h-4 text-blue-600" />
@@ -122,6 +132,7 @@ export default function Gigs() {
                           ₹{gig.budget.toLocaleString()}
                         </span>
                       </div>
+
                       {gig.location && (
                         <div className="flex items-center gap-2 text-sm text-gray-600">
                           <MapPin className="w-4 h-4" />
@@ -151,11 +162,21 @@ export default function Gigs() {
                       ) : (
                         <Link
                           to={`/gig/${gig._id}`}
-                          className="group/btn inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-2xl font-semibold text-sm shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 group-hover/btn:scale-105"
+                          className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-2xl font-semibold text-sm shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
                         >
                           View Gig
-                          <svg className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 5l7 7-7 7"
+                            />
                           </svg>
                         </Link>
                       )}
@@ -165,14 +186,47 @@ export default function Gigs() {
               );
             })
           ) : (
-            <div className="col-span-full text-center py-32">
-              <div className="w-28 h-28 bg-blue-100 rounded-3xl mx-auto mb-8 flex items-center justify-center">
-                <Briefcase className="w-16 h-16 text-blue-600" />
+            // EMPTY CARD (when no gigs)
+            <div className="col-span-full">
+              <div className="max-w-2xl mx-auto bg-white/90 backdrop-blur-xl rounded-3xl shadow-xl border border-white/50 p-10 text-center">
+                <div className="w-20 h-20 bg-blue-100 rounded-3xl mx-auto mb-6 flex items-center justify-center">
+                  <Briefcase className="w-10 h-10 text-blue-600" />
+                </div>
+
+                <h2 className="text-3xl font-bold text-gray-900 mb-3">
+                  No gigs available
+                </h2>
+
+                <p className="text-gray-600 text-lg leading-relaxed mb-8">
+                  There are currently no gigs posted. Check back later for new
+                  opportunities.
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="bg-blue-600 text-white px-8 py-3 rounded-2xl font-semibold hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+                  >
+                    Refresh
+                  </button>
+
+                  <Link
+                    to="/"
+                    className="bg-white text-blue-700 border border-blue-600 px-8 py-3 rounded-2xl font-semibold hover:bg-blue-50 transition-all duration-200"
+                  >
+                    Go Home
+                  </Link>
+
+                  {user?.role === "client" && (
+                    <Link
+                      to="/create-gig"
+                      className="bg-blue-600 text-white px-8 py-3 rounded-2xl font-semibold hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+                    >
+                      Post a Gig
+                    </Link>
+                  )}
+                </div>
               </div>
-              <h2 className="text-3xl font-bold text-gray-800 mb-4">No gigs available</h2>
-              <p className="text-xl text-gray-600 max-w-md mx-auto mb-8">
-                There are currently no gigs posted. Check back later for new opportunities!
-              </p>
             </div>
           )}
         </div>

@@ -13,9 +13,15 @@ const PORT= process.env.PORT
 
 const app = express();
 
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://gigflow-iota.vercel.app",
+    "http://ec2-3-81-28-89.compute-1.amazonaws.com:5173"
+];
+
 app.use(cors({
-    origin:"http://localhost:5173",
-    credentials:true
+    origin: allowedOrigins,
+    credentials: true
 }))
 app.use(cookieParser())
 
@@ -24,8 +30,13 @@ app.use(express.urlencoded())
 
 db();
 
+app.get("/",(req,res)=>{
+    res.json({
+        message:"Server is runnign "
+    })
+})
 app.use("/api/auth", authRoute);
-app.use("/api/gigs",isLoggedIn, gigRoute);
+app.use("/api/gigs", gigRoute);
 app.use("/api/users", userRoutes);
 
 

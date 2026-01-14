@@ -5,7 +5,7 @@ import isClient from "../middleware/isClient.js";
 
 const router=Router()
 
-router.post("/",isClient, async (req, res) => {
+router.post("/",isLoggedIn,isClient, async (req, res) => {
   const gig = await Gig.create(req.body);
   res.json(gig);
 });
@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
   res.json(gigs);
 });
 
-router.get("/:gigId", async (req, res) => {
+router.get("/:gigId",isLoggedIn, async (req, res) => {
   try {
     const gig = await Gig.findById(req.params.gigId).populate(
       "postedBy",
@@ -34,7 +34,7 @@ router.get("/:gigId", async (req, res) => {
   }
 });
 
-router.post("/:gigId/apply", async (req, res) => {
+router.post("/:gigId/apply",isLoggedIn, async (req, res) => {
   try {
     const gig = await Gig.findById(req.params.gigId);
     if (!gig) return res.status(404).json({ message: "Gig not found" });
@@ -59,7 +59,7 @@ router.post("/:gigId/apply", async (req, res) => {
   }
 });
 
-router.post("/:gigId/approve/:userId", async (req, res) => {
+router.post("/:gigId/approve/:userId",isLoggedIn, async (req, res) => {
   try {
     const { gigId, userId } = req.params;
 
@@ -94,7 +94,7 @@ router.post("/:gigId/approve/:userId", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
-router.get("/:gigId/applicants", async (req, res) => {
+router.get("/:gigId/applicants",isLoggedIn, async (req, res) => {
   try {
     const gig = await Gig.findById(req.params.gigId)
       .populate("applicants.user", "name email");

@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Check  out code
         uses: actions/checkout@v3
 
       - name: Setup SSH
@@ -24,10 +24,10 @@ jobs:
             git pull
             cd server
             pnpm install
-            pm2 restart gigflow-server
+            pm2 restart server
             cd ../client
             pnpm install
             pnpm build
-            pm2 restart gigflow-client
+            pm2 restart client
             exit
           EOF
