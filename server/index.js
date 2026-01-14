@@ -6,6 +6,7 @@ import dotenv from "dotenv"
 import cors from "cors"
 import cookieParser from "cookie-parser";
 import { isLoggedIn } from "./middleware/auth.js";
+import userRoutes from "./routes/user.routes.js";
 
 dotenv.config()
 const PORT= process.env.PORT
@@ -25,6 +26,7 @@ db();
 
 app.use("/api/auth", authRoute);
 app.use("/api/gigs",isLoggedIn, gigRoute);
+app.use("/api/users", userRoutes);
 
 
 app.listen(PORT, () => console.log("Server running on port ",PORT));

@@ -12,6 +12,10 @@ const gigSchema = new Schema({
     createdAt: Date,
   }
 ],
+ approvedApplicant: {
+    user: { type: Schema.Types.ObjectId, ref: "User" },
+    approvedAt: Date
+  },
 }, { timestamps: true });
 
 const Gig=model("Gig", gigSchema);

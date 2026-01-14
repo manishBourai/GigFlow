@@ -10,11 +10,13 @@ import {
   MessageCircle,
   Send,
   Briefcase,
-  CheckCircle
+  CheckCircle,
 } from "lucide-react";
 import api from "../api/axios";
+import { useAuthStore } from "../store/authStore";
 
 export default function GigDetail() {
+   const loggedInUser = useAuthStore((state) => state.user);
   const { id } = useParams();
   const [gig, setGig] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -44,7 +46,9 @@ export default function GigDetail() {
         <div className="max-w-4xl mx-auto px-6">
           <div className="flex items-center justify-center py-32">
             <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
-            <span className="ml-4 text-xl font-medium text-gray-600">Loading gig details...</span>
+            <span className="ml-4 text-xl font-medium text-gray-600">
+              Loading gig details...
+            </span>
           </div>
         </div>
       </div>
@@ -58,12 +62,24 @@ export default function GigDetail() {
         <div className="max-w-4xl mx-auto px-6">
           <div className="text-center py-32">
             <div className="w-24 h-24 bg-gradient-to-r from-red-100 to-red-200 rounded-3xl mx-auto mb-8 flex items-center justify-center">
-              <svg className="w-12 h-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              <svg
+                className="w-12 h-12 text-red-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1}
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                />
               </svg>
             </div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">{error || "Gig not found"}</h2>
-            <Link 
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">
+              {error || "Gig not found"}
+            </h2>
+            <Link
               to="/gigs"
               className="inline-flex items-center gap-2 bg-gradient-to-r from-primary to-primary/90 text-white px-8 py-3 rounded-2xl font-semibold hover:from-primary/90 hover:to-primary shadow-lg hover:shadow-xl transition-all duration-200"
             >
@@ -81,7 +97,7 @@ export default function GigDetail() {
       <div className="max-w-6xl mx-auto px-6">
         {/* Breadcrumb */}
         <div className="mb-12">
-          <Link 
+          <Link
             to="/gigs"
             className="inline-flex items-center gap-2 text-gray-600 hover:text-primary font-medium transition-colors text-sm p-3 bg-white/70 backdrop-blur-xl rounded-2xl hover:bg-white shadow-sm border border-white/50"
           >
@@ -123,7 +139,9 @@ export default function GigDetail() {
                     <DollarSign className="w-7 h-7 text-white" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-600 uppercase tracking-wide">Budget</p>
+                    <p className="text-sm font-medium text-gray-600 uppercase tracking-wide">
+                      Budget
+                    </p>
                     <p className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-700 bg-clip-text text-transparent">
                       ₹{gig.budget.toLocaleString()}
                     </p>
@@ -162,7 +180,9 @@ export default function GigDetail() {
 
             {/* Quick Actions */}
             <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-xl border border-white/50">
-              <h3 className="text-xl font-bold text-gray-900 mb-6">Quick Actions</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-6">
+                Quick Actions
+              </h3>
               <div className="space-y-3">
                 <Link
                   to={`/user/${gig.postedBy?._id}`}
@@ -171,19 +191,33 @@ export default function GigDetail() {
                   <User className="w-5 h-5 flex-shrink-0" />
                   View Client Profile
                 </Link>
-               
+                <Link
+                  to={`/gig/${gig._id}/applicants`}
+                  className="bg-purple-600 text-white px-4 py-2 rounded-lg"
+                >
+                  View Applicants
+                </Link>
               </div>
             </div>
+             {gig.approvedApplicant?.user === loggedInUser._id && (
+                        <div className="bg-green-200 p-3 rounded-lg text-green-800 mb-4">
+                          🎉 You were approved for this gig!
+                        </div>
+                      )}
 
             {/* Client Info */}
             <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-3xl p-8 shadow-xl border border-indigo-100">
-              <h3 className="text-xl font-bold text-gray-900 mb-6">Client Info</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-6">
+                Client Info
+              </h3>
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-20 h-20 bg-gradient-to-r from-indigo-400 to-purple-500 rounded-3xl flex items-center justify-center shadow-2xl">
                   <User className="w-9 h-9 text-white" />
                 </div>
                 <div>
-                  <h4 className="text-xl font-bold text-gray-900">{gig.postedBy?.name}</h4>
+                  <h4 className="text-xl font-bold text-gray-900">
+                    {gig.postedBy?.name}
+                  </h4>
                   <p className="text-sm text-gray-600 bg-indigo-100 px-3 py-1 rounded-full inline-block mt-1">
                     Verified Client
                   </p>

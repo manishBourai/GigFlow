@@ -11,6 +11,7 @@ import GigDetail from "./pages/GigDetail";
 import UserProfile from "./pages/UserProfile";
 import ApplyToGig from "./pages/ApplyToGig";
 import Footer from "./components/Footer";
+import Applicants from "./pages/Applicants";
 
 export default function App() {
     const fetchUser = useAuthStore((s) => s.fetchUser);
@@ -29,6 +30,8 @@ export default function App() {
         <Route path="/gig/:id" element={<GigDetail />} />
         <Route path="/user/:id" element={<UserProfile/>} />
         <Route path="/gig/apply/:id" element={<ApplyToGig/>} />
+        <Route path="/gig/:id/applicants" element={<Applicants/>} />
+
       </Routes>
       <Footer/>
     </BrowserRouter>
