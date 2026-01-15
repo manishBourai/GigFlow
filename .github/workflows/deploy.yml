@@ -2,32 +2,47 @@ name: Deploy to EC2
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check  out code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup SSH
+      - name: Setup SSH agent
         uses: webfactory/ssh-agent@v0.5.4
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Deploy to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << EOF
+            set -e
+
+            # ensure PATH
+            export PATH=/usr/bin:/usr/local/bin:\$PATH
+
             cd ${{ secrets.APP_DIR }}
-            git pull
+
+            echo "Resetting local changes..."
+            git fetch origin
+            git reset --hard origin/main
+
+            echo "Backend setup..."
             cd server
-            pnpm install
-            pm2 restart server
+            /usr/bin/pnpm install
+            /usr/bin/pm2 restart server || /usr/bin/pm2 start index.js --name server
+
+            echo "Frontend setup..."
             cd ../client
-            pnpm install
-            pnpm build
-            pm2 restart client
-            exit
+            /usr/bin/pnpm install
+            /usr/bin/pnpm build
+
+            /usr/bin/pm2 restart client || /usr/bin/pm2 start "serve -s dist -l 3000" --name client
+
+            /usr/bin/pm2 save
+            echo "✅ Deployment complete"
           EOF

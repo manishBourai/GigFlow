@@ -5,7 +5,6 @@ import gigRoute from "./routes/gig.routes.js"
 import dotenv from "dotenv"
 import cors from "cors"
 import cookieParser from "cookie-parser";
-import { isLoggedIn } from "./middleware/auth.js";
 import userRoutes from "./routes/user.routes.js";
 
 dotenv.config()
