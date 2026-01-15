@@ -23,7 +23,7 @@ jobs:
             set -e
 
             # ensure PATH
-            export PATH=/usr/bin:/usr/local/bin:\$PATH
+            export PATH=\$PATH:/usr/local/bin:/home/ubuntu/.local/share/pnpm
 
             cd ${{ secrets.APP_DIR }}
 
@@ -33,16 +33,15 @@ jobs:
 
             echo "Backend setup..."
             cd server
-            /usr/bin/pnpm install
-            /usr/bin/pm2 restart server || /usr/bin/pm2 start index.js --name server
+            pnpm install
+            pm2 restart server || pm2 start index.js --name server
 
             echo "Frontend setup..."
             cd ../client
-            /usr/bin/pnpm install
-            /usr/bin/pnpm build
+            pnpm install
 
-            /usr/bin/pm2 restart client || /usr/bin/pm2 start "serve -s dist -l 3000" --name client
+            pm2 restart client
 
-            /usr/bin/pm2 save
+            pm2 save
             echo "✅ Deployment complete"
           EOF
