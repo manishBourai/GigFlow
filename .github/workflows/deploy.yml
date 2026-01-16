@@ -7,6 +7,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -18,30 +19,29 @@ jobs:
 
       - name: Deploy to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} 'bash -se' << 'EOF'
-          set -e
+          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << EOF
+            set -e
 
-          # Make pnpm available in non-interactive shell
-          export PATH="$PATH:/usr/local/bin:$HOME/.local/share/pnpm"
-          cd "${APP_DIR}"
+            # Make pnpm available in non-interactive shell
+            export PATH="\$PATH:/usr/local/bin:\$HOME/.local/share/pnpm"
 
-          echo "Resetting local changes..."
-          git fetch origin
-          git reset --hard origin/main
+            # IMPORTANT: cd into ACTUAL git repo
+            cd ${{ secrets.APP_DIR }}
 
-          echo "Backend setup..."
-          cd server
-          pnpm install
-          pm2 restart server || pm2 start index.js --name server
+            echo "Resetting local changes..."
+            git fetch origin
+            git reset --hard origin/main
 
-          echo "Frontend setup..."
-          cd ../client
-          pnpm install
-          pnpm build
-          pm2 restart client
+            echo "Backend setup..."
+            cd server
+            pnpm install --frozen-lockfile
+            pm2 restart server || pm2 start index.js --name server
 
-          pm2 save
-          echo "✅ Deployment complete"
+            echo "Frontend setup..."
+            cd ../client
+            pnpm build
+            pm2 restart client
+
+            pm2 save
+            echo "✅ Deployment complete"
           EOF
-        env:
-          APP_DIR: ${{ secrets.APP_DIR }}
