@@ -23,9 +23,6 @@ jobs:
 
           # Make pnpm available in non-interactive shell
           export PATH="$PATH:/usr/local/bin:$HOME/.local/share/pnpm"
-          corepack enable
-          corepack prepare pnpm@latest --activate
-
           cd "${APP_DIR}"
 
           echo "Resetting local changes..."
