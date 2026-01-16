@@ -34,7 +34,7 @@ jobs:
 
             echo "Backend setup..."
             cd server
-            pnpm install --frozen-lockfile
+            /home/ubuntu/.nvm/versions/node/v22.21.0/bin/pnpm install --frozen-lockfile
             pm2 restart server || pm2 start index.js --name server
 
             echo "Frontend setup..."
