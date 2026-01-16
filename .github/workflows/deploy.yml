@@ -22,10 +22,6 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << EOF
             set -e
 
-            # Make pnpm available in non-interactive shell
-            export PATH="\$PATH:/usr/local/bin:\$HOME/.local/share/pnpm"
-
-            # IMPORTANT: cd into ACTUAL git repo
             cd ${{ secrets.APP_DIR }}
 
             echo "Resetting local changes..."
@@ -37,9 +33,7 @@ jobs:
             /home/ubuntu/.nvm/versions/node/v22.21.0/bin/pnpm install --frozen-lockfile
             pm2 restart server || pm2 start index.js --name server
 
-            echo "Frontend setup..."
-            cd ../client
-            pnpm build
+            echo "Frontend restart..."
             pm2 restart client
 
             pm2 save
