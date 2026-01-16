@@ -1,6 +1,7 @@
 import { Router } from "express";
 import Gig from "../models/Gig.js";
 import isClient from "../middleware/isClient.js";
+import {isLoggedIn} from "../middleware/auth.js"
 
 
 const router=Router()
