@@ -22,6 +22,11 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << EOF
             set -e
 
+            # 🔑 Load nvm & node explicitly
+            export NVM_DIR="\$HOME/.nvm"
+            [ -s "\$NVM_DIR/nvm.sh" ] && . "\$NVM_DIR/nvm.sh"
+            nvm use 22
+
             cd ${{ secrets.APP_DIR }}
 
             echo "Resetting local changes..."
@@ -30,7 +35,7 @@ jobs:
 
             echo "Backend setup..."
             cd server
-            /home/ubuntu/.nvm/versions/node/v22.21.0/bin/pnpm install --frozen-lockfile
+            pnpm install --frozen-lockfile
             pm2 restart server || pm2 start index.js --name server
 
             echo "Frontend restart..."
