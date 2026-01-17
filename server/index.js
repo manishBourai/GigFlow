@@ -15,7 +15,8 @@ const app = express();
 const allowedOrigins = [
     "http://localhost:5173",
     "https://gigflow-iota.vercel.app",
-    "http://ec2-3-81-28-89.compute-1.amazonaws.com:5173"
+    "http://ec2-3-81-28-89.compute-1.amazonaws.com:5173",
+    "http://ec2-3-81-28-89.compute-1.amazonaws.com"
 ];
 
 app.use(cors({

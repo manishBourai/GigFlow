@@ -22,7 +22,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << EOF
             set -e
 
-            # 🔑 Load nvm & node explicitly
+            # Load nvm & node
             export NVM_DIR="\$HOME/.nvm"
             [ -s "\$NVM_DIR/nvm.sh" ] && . "\$NVM_DIR/nvm.sh"
             nvm use 22
@@ -38,8 +38,21 @@ jobs:
             pnpm install --frozen-lockfile
             pm2 restart server || pm2 start index.js --name server
 
-            echo "Frontend restart..."
-            pm2 restart client
+            echo "Building frontend..."
+            cd ../client
+            pnpm install
+            pnpm build
+
+            echo "Deploying frontend to nginx..."
+            sudo mkdir -p /var/www/client
+            sudo rm -rf /var/www/client/dist
+            sudo cp -r dist /var/www/client/
+
+            sudo chown -R www-data:www-data /var/www/client
+            sudo chmod -R 755 /var/www/client
+
+            sudo nginx -t
+            sudo systemctl reload nginx
 
             pm2 save
             echo "✅ Deployment complete"

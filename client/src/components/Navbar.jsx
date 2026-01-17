@@ -2,12 +2,14 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
 import { User, LogOut, Briefcase, ArrowRight } from "lucide-react";
+import { useState } from "react";
 
 export default function Navbar() {
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
   const location = useLocation();
+    const [open, setOpen] = useState(false);  
 
   const handleLogout = () => {
     logout();
@@ -112,12 +114,91 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Menu Button */}
-        <button className="md:hidden p-2 rounded-xl hover:bg-blue-50 transition-colors">
-          <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          <button
+          onClick={() => setOpen(!open)}
+          className="md:hidden p-2 rounded-xl hover:bg-blue-50 transition-colors"
+        >
+          <svg
+            className="w-6 h-6 text-gray-700"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 6h16M4 12h16M4 18h16"
+            />
           </svg>
         </button>
       </div>
+
+      {/* Mobile dropdown */}
+      {open && (
+  <div className="md:hidden mt-4 bg-white rounded-2xl shadow-xl border border-gray-100 p-4 space-y-2">
+    
+    <Link
+      to="/"
+      onClick={() => setOpen(false)}
+      className="block px-4 py-3 rounded-xl font-semibold text-gray-700 hover:bg-blue-50"
+    >
+      Home
+    </Link>
+
+    {user ? (
+      <>
+        <Link
+          to={`/user/${user._id}`}
+          onClick={() => setOpen(false)}
+          className="block px-4 py-3 rounded-xl font-semibold text-gray-700 hover:bg-blue-50"
+        >
+          Profile
+        </Link>
+
+        {user.role === "client" && (
+          <Link
+            to="/create-gig"
+            onClick={() => setOpen(false)}
+            className="block px-4 py-3 rounded-xl font-semibold text-gray-700 hover:bg-blue-50"
+          >
+            Post Gig
+          </Link>
+        )}
+
+        <button
+          onClick={() => {
+            handleLogout();
+            setOpen(false);
+          }}
+          className="w-full text-left px-4 py-3 rounded-xl font-semibold text-red-600 hover:bg-red-50"
+        >
+          Logout
+        </button>
+      </>
+    ) : (
+      <>
+        <Link
+          to="/login"
+          onClick={() => setOpen(false)}
+          className="block px-4 py-3 rounded-xl font-semibold text-gray-700 hover:bg-blue-50"
+        >
+          Login
+        </Link>
+
+        <Link
+          to="/register"
+          onClick={() => setOpen(false)}
+          className="block px-4 py-3 rounded-xl font-semibold text-blue-700 hover:bg-blue-50"
+        >
+          Get Started
+        </Link>
+      </>
+    )}
+  </div>
+)}
+
+      
     </nav>
   );
 }
