@@ -47,16 +47,12 @@ jobs:
             sudo mkdir -p /var/www/client
             sudo rm -rf /var/www/client/dist
             sudo cp -r dist /var/www/client/
-            pm2 reset client 
 
             sudo chown -R www-data:www-data /var/www/client
             sudo chmod -R 755 /var/www/client
 
             sudo nginx -t
             sudo systemctl reload nginx
-
-            pm2 restart client 
-
 
             pm2 save
             echo "✅ Deployment complete"
